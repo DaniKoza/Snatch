@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/background_road"
+    tools:context=".GameActivity"
+    android:id="@+id/game_parent_layout">
+
+
+
+    /* Lives Left /*
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_alignParentTop="true">
+
+        <ImageView
+            android:id="@+id/game_bribe_1"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_alignParentRight="true"
+            android:layout_margin="10dp"
+            android:src="@drawable/ic_bribe"
+            android:visibility="visible"/>
+
+        <ImageView
+            android:id="@+id/game_bribe_2"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_margin="10dp"
+            android:layout_toLeftOf="@+id/game_bribe_1"
+            android:src="@drawable/ic_bribe"
+            android:visibility="visible"/>
+
+        <ImageView
+            android:id="@+id/game_bribe_3"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_margin="10dp"
+            android:layout_toLeftOf="@+id/game_bribe_2"
+            android:src="@drawable/ic_bribe"
+            android:visibility="visible"/>
+
+    </RelativeLayout>
+
+    /* Grid of police and thieves */
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:columnCount="3"
+        android:rowCount="6">
+
+        <ImageView
+            android:id="@+id/game_police_car_00"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_row="0"
+            android:layout_column="0"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:layout_margin="30dp"
+            android:src="@drawable/ic_police"
+            android:visibility="invisible"/>
+
+        <ImageView
+            android:id="@+id/game_police_car_01"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_row="0"
+            android:layout_column="1"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:layout_margin="30dp"
+            android:src="@drawable/ic_police"
+            android:visibility="invisible"/>
+
+        <ImageView
+            android:id="@+id/game_police_car_02"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_row="0"
+            android:layout_column="2"
+            android:layout_columnWeight="1"
+            android:layout_margin="30dp"
+            android:src="@drawable/ic_police"
+            android:visibility="invisible"/>
+
+        <ImageView
+            android:id="@+id/game_police_car_10"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_row="1"
+            android:layout_column="0"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:layout_margin="30dp"
+            android:src="@drawable/ic_police"
+            android:visibility="invisible"/>
+
+        <ImageView
+            android:id="@+id/game_police_car_11"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_row="1"
+            android:layout_column="1"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:layout_margin="30dp"
+            android:src="@drawable/ic_police"
+            android:visibility="invisible"/>
+
+        <ImageView
+            android:id="@+id/game_police_car_12"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_row="1"
+            android:layout_column="2"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:layout_margin="30dp"
+            android:src="@drawable/ic_police"
+            android:visibility="invisible"/>
+
+        <ImageView
+            android:id="@+id/game_police_car_20"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_row="2"
+            android:layout_column="0"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:layout_margin="30dp"
+            android:src="@drawable/ic_police"
+            android:visibility="invisible"/>
+
+        <ImageView
+            android:id="@+id/game_police_car_21"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_row="2"
+            android:layout_column="1"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:layout_margin="30dp"
+            android:src="@drawable/ic_police"
+            android:visibility="invisible"/>
+
+        <ImageView
+            android:id="@+id/game_police_car_22"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_row="2"
+            android:layout_column="2"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:layout_margin="30dp"
+            android:src="@drawable/ic_police"
+            android:visibility="invisible"/>
+
+        <ImageView
+            android:id="@+id/game_police_car_30"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_row="3"
+            android:layout_column="0"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:layout_margin="30dp"
+            android:src="@drawable/ic_police"
+            android:visibility="invisible"/>
+
+        <ImageView
+            android:id="@+id/game_police_car_31"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_row="3"
+            android:layout_column="1"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:layout_margin="30dp"
+            android:src="@drawable/ic_police"
+            android:visibility="invisible"/>
+
+        <ImageView
+            android:id="@+id/game_police_car_32"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_row="3"
+            android:layout_column="2"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:layout_margin="30dp"
+            android:src="@drawable/ic_police"
+            android:visibility="invisible"/>
+
+        <ImageView
+            android:id="@+id/game_police_car_40"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_row="4"
+            android:layout_column="0"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:layout_margin="30dp"
+            android:src="@drawable/ic_police"
+            android:visibility="invisible"/>
+
+        <ImageView
+            android:id="@+id/game_police_car_41"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_row="4"
+            android:layout_column="1"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:layout_margin="30dp"
+            android:src="@drawable/ic_police"
+            android:visibility="invisible"/>
+
+
+        <ImageView
+            android:id="@+id/game_police_car_42"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_row="4"
+            android:layout_column="2"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:layout_margin="30dp"
+            android:src="@drawable/ic_police"
+            android:visibility="invisible"/>
+
+        <ImageView
+            android:id="@+id/game_police_car_50"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_row="5"
+            android:layout_column="0"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:layout_margin="30dp"
+            android:src="@drawable/ic_police"
+            android:visibility="invisible"/>
+
+        <ImageView
+            android:id="@+id/game_police_car_51"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_row="5"
+            android:layout_column="1"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:layout_margin="30dp"
+            android:src="@drawable/ic_police"
+            android:visibility="invisible"/>
+
+        <ImageView
+            android:id="@+id/game_police_car_52"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_row="5"
+            android:layout_column="2"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:layout_margin="30dp"
+            android:src="@drawable/ic_police"
+            android:visibility="invisible"/>
+
+        /* Thieves */
+        <ImageView
+            android:id="@+id/game_thief_1"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_row="5"
+            android:layout_column="0"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:layout_margin="30dp"
+            android:src="@drawable/ic_thief"
+            android:visibility="invisible"/>
+
+        <ImageView
+            android:id="@+id/game_thief_2"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_row="5"
+            android:layout_column="1"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:layout_margin="30dp"
+            android:src="@drawable/ic_thief" />
+
+        <ImageView
+            android:id="@+id/game_thief_3"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_row="5"
+            android:layout_column="2"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:layout_margin="30dp"
+            android:src="@drawable/ic_thief"
+            android:visibility="invisible"/>
+
+    </GridLayout>
+
+    /* Arrows */
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:paddingLeft="90dp"
+        android:paddingRight="90dp"
+        android:gravity="bottom">
+
+        <Button
+            android:id="@+id/game_left_arrow"
+            android:contentDescription="Left"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentLeft="true"
+            android:background="@drawable/ic_arrow"
+            android:visibility="visible"/>
+
+        <Button
+            android:id="@+id/game_right_arrow"
+            android:contentDescription="Right"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/ic_arrow"
+            android:rotation="180"
+            android:visibility="visible"/>
+    </RelativeLayout>
+
+</RelativeLayout>

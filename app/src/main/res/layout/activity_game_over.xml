@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".GameOverActivity">
+
+    <ImageView
+        android:id="@+id/game_over_ic_busted"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_centerInParent="true"
+        android:src="@drawable/ic_busted"/>
+
+    <TextView
+        android:layout_above="@+id/game_over_ic_busted"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="BUSTED"
+        android:textColor="@color/colorBlack"
+        android:textSize="34sp"
+        android:fontFamily="sans-serif-black"/>
+
+    <Button
+        android:id="@+id/BTN_play_again"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/game_over_ic_busted"
+        android:layout_centerHorizontal="true"
+        android:text="Play Again"/>
+
+    <Button
+        android:id="@+id/BTN_back_to_main"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/BTN_play_again"
+        android:layout_centerHorizontal="true"
+        android:text="Main Menu"
+        android:layout_margin="20dp"/>
+
+
+</RelativeLayout>

@@ -21,7 +21,7 @@ public class GameOverActivity extends AppCompatActivity {
         BTN_play_again = findViewById(R.id.BTN_play_again);
         BTN_back_to_main = findViewById(R.id.BTN_back_to_main);
 
-        /* Go back to game */
+        /* Play again */
         BTN_play_again.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

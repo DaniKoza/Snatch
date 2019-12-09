@@ -25,10 +25,11 @@ public class GameActivity extends AppCompatActivity {
 
     private int thiefPosition;
     private int lives;
-    private int speed = 200;
+    private int speed = 350;
     private int policePosition1;
     private int policePosition2;
     private boolean isGameOver = false;
+    private boolean isPaused = false;
 
 
     @Override
@@ -63,15 +64,30 @@ public class GameActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        MySignal.vibrate(GameActivity.this, 1000);
         Toast.makeText(GameActivity.this, "The Cops Are Coming! RUN!", Toast.LENGTH_LONG).show();
+        setRandomPoliceCars();
+        startGame();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        setRandomPoliceCars();
-        startGame();
+        isPaused = true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent mainIntent = new Intent(GameActivity.this, MenuActivity.class);
+        GameActivity.this.startActivity(mainIntent);
+        isGameOver = true;
+        GameActivity.this.finish();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        isPaused = true;
     }
 
     //          Setters          //
@@ -174,14 +190,15 @@ public class GameActivity extends AppCompatActivity {
 
     private void startGame() {
         final Handler handler = new Handler();
-        Runnable myRun = new Runnable() {
+        final Runnable myRun = new Runnable() {
             @Override
             public void run() {
                 movePolice();
                 checkIfBusted(getThiefPosition(), getPolicePosition1(), getPolicePosition2());
                 checkIfLost();
-                if (isGameOver)
+                if (isGameOver) {
                     return;
+                }
                 startGame();
             }
         };

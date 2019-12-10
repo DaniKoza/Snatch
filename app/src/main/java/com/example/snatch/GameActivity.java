@@ -66,13 +66,14 @@ public class GameActivity extends AppCompatActivity {
         super.onStart();
         Toast.makeText(GameActivity.this, "The Cops Are Coming! RUN!", Toast.LENGTH_LONG).show();
         setRandomPoliceCars();
+        isPaused = false;
         startGame();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        isPaused = true;
+        isPaused = false;
     }
 
     @Override
@@ -197,6 +198,9 @@ public class GameActivity extends AppCompatActivity {
                 checkIfBusted(getThiefPosition(), getPolicePosition1(), getPolicePosition2());
                 checkIfLost();
                 if (isGameOver) {
+                    return;
+                }
+                if (isPaused) {
                     return;
                 }
                 startGame();

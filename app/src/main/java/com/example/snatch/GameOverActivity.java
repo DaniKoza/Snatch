@@ -43,7 +43,14 @@ public class GameOverActivity extends AppCompatActivity {
         });
 
 
-
-
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent mainIntent = new Intent(GameOverActivity.this, MenuActivity.class);
+        startActivity(mainIntent);
+        finish();
+    }
+
 }

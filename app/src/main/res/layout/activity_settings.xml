@@ -1,9 +1,166 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SettingsActivity">
+    tools:context=".SettingsActivity"
+    android:background="@drawable/background_blue">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/settings_headline"
+        android:layout_above="@+id/settings_center_linear_layout"
+        android:layout_centerInParent="true"
+        android:text="SETTINGS "
+        android:textColor="@color/colorGreenStrong"
+        android:textSize="60sp"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:textStyle="bold"
+        android:shadowColor="@color/colorBlack"
+        android:shadowDx="12"
+        android:shadowDy="12"
+        android:shadowRadius="8"
+        />
+
+
+    <LinearLayout
+        android:id="@+id/settings_center_linear_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:orientation="vertical"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="50dp">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:background="@drawable/button_gradiant_2"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:layout_margin="10dp"
+            android:padding="20dp">
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Police Speed"
+                android:textAlignment="center"
+                android:textColor="@color/colorBlack"
+                android:textSize="20dp" />
+
+            <RadioGroup
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <RadioButton
+                    android:id="@+id/settings_RBTN_slow"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:buttonTint="@color/colorBlack"
+                    android:text="Slow" />
+
+                <RadioButton
+                    android:id="@+id/settings_RBTN_fast"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:buttonTint="@color/colorBlack"
+                    android:text="Fast" />
+            </RadioGroup>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:background="@drawable/button_gradiant_2"
+            android:gravity="center"
+            android:layout_margin="10dp"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Movement With"
+                android:textAlignment="center"
+                android:textColor="@color/colorBlack"
+                android:textSize="20dp" />
+
+            <RadioGroup
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <RadioButton
+                    android:id="@+id/settings_RBTN_buttons"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:buttonTint="@color/colorBlack"
+                    android:text="Arrows"/>
+
+                <RadioButton
+                    android:id="@+id/settings_RBTN_sensors"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:buttonTint="@color/colorBlack"
+                    android:padding="10dp"
+                    android:text="Sensors" />
+
+            </RadioGroup>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:background="@drawable/button_gradiant_2"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:layout_margin="10dp"
+            android:padding="20dp">
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sound"
+                android:textAlignment="center"
+                android:textColor="@color/colorBlack"
+                android:textSize="20dp" />
+
+            <RadioGroup
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <RadioButton
+                    android:id="@+id/settings_RBTN_sound_on"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:buttonTint="@color/colorBlack"
+                    android:text="On" />
+
+                <RadioButton
+                    android:id="@+id/settings_RBTN_sound_off"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:buttonTint="@color/colorBlack"
+                    android:text="Off" />
+            </RadioGroup>
+        </LinearLayout>
+    </LinearLayout>
+
+
+</RelativeLayout>

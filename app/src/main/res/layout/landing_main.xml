@@ -4,28 +4,27 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:keepScreenOn="true"
-    tools:context=".LandingActivity"
+    tools:context=".SplashActivity"
     android:background="@drawable/background_blue">
 
 
-
     <ImageView
-        android:id="@+id/app_IMG_splash"
+        android:id="@+id/splash_IMG_runner"
         android:layout_width="150dp"
         android:layout_height="200dp"
-        android:layout_centerInParent="true"
-        android:adjustViewBounds="true"
-        android:src="@drawable/ic_wanted"
-        android:paddingLeft="20dp"/>
+        android:src="@drawable/ic_runner"
+        android:paddingLeft="20dp"
+        android:layout_marginTop="200dp"
+        android:visibility="invisible"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Snatch and Run"
+        android:text="Don't Let The Cops Get You"
         android:textSize="25sp"
         android:textColor="@color/colorBlack"
         android:fontFamily="sans-serif-black"
-        android:layout_centerInParent="true"
-        android:layout_below="@+id/app_IMG_splash" />
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="400dp"/>
 
 </RelativeLayout>

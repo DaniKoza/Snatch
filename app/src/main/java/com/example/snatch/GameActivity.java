@@ -3,97 +3,95 @@ package com.example.snatch;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import java.util.Arrays;
+
 public class GameActivity extends AppCompatActivity {
 
-    private ImageView[] bribes, thieves, policeCars;
+    private final int DEFAULT_LIVES = 2;
+    private final int DEFAULT_SCORE = 0;
+    private final int DEFAULT_POLICE_INTERVAL = 5;
+    private final int DEFAULT_POSITION = 22;
+
+    private final int COLUMNS = 5;
+    private final int ROWS = 5;
+
+    private ImageView[] bribes;
+    private ImageView[] grid = new ImageView[COLUMNS * ROWS];
+    private int[] figures = {R.drawable.thief, R.drawable.police_car, R.drawable.coin};
     private Button game_BTN_left_arrow;
     private Button game_BTN_right_arrow;
+    private GridLayout game_LAYOUT_grid;
 
-    private final int LEFT_BOUNDARY = -1;
-    private final int RIGHT_BOUNDARY = 3;
-    private final int LOWER_BOUNDARY = 17;
-    private final int DEFAULT_LIVES = 2;
-    private final int DEFAULT_POSITION = 1;
-    private final int DEFAULT_LANE_NUM = 3;
-
-    private int thiefPosition;
+    private int thiefCurrentPos;
     private int lives;
-    private int speed = 350;
-    private int policePosition1;
-    private int policePosition2;
-    private boolean isGameOver = false;
-    private boolean isPaused = false;
+    private int score;
+    private int intervalBetweenNewPolice;
+    private int speed;
+    private Handler handler = new Handler();
+    private Runnable myRun;
+
+
+    private MySharedPreferences msp;
+    private MyRotation mrs;
+    private MediaPlayer sound_coin;
+    private MediaPlayer sound_busted;
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
+        msp = new MySharedPreferences(this);
+        setBribesViews();
+        setGridViews();
+        setArrowsViews();
+        setDefaultData();
+        setControlSettings();
+        startGame();
 
-        setBribes();
-        setThieves();
-        setPoliceCars();
-        setLives(DEFAULT_LIVES);
-        setThiefPosition(DEFAULT_POSITION);
-
-        game_BTN_right_arrow = findViewById(R.id.game_right_arrow);
-        game_BTN_left_arrow = findViewById(R.id.game_left_arrow);
-
-        /* Movement of thieves */
-        game_BTN_right_arrow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                moveThief(game_BTN_right_arrow.getContentDescription().toString());
-            }
-        });
-        game_BTN_left_arrow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                moveThief(game_BTN_left_arrow.getContentDescription().toString());
-            }
-        });
     }
+
 
     @Override
     protected void onStart() {
         super.onStart();
         Toast.makeText(GameActivity.this, "The Cops Are Coming! RUN!", Toast.LENGTH_LONG).show();
-        setRandomPoliceCars();
-        isPaused = false;
-        startGame();
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        isPaused = false;
+    protected void onRestart() {
+        super.onRestart();
+        if (mrs != null)
+            mrs.setSensor();
+        handler.postDelayed(myRun, speed);
     }
 
     @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        Intent mainIntent = new Intent(GameActivity.this, MenuActivity.class);
-        GameActivity.this.startActivity(mainIntent);
-        isGameOver = true;
-        GameActivity.this.finish();
+    protected void onStop() {
+        super.onStop();
+        if (mrs != null)
+            mrs.stopSensor();
+        handler.removeCallbacks(myRun);
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        isPaused = true;
-    }
 
     //          Setters          //
     /* Setting ImageView's for bribes/lives */
-    public void setBribes() {
+    public void setBribesViews() {
         this.bribes = new ImageView[]{
                 findViewById(R.id.game_bribe_1),
                 findViewById(R.id.game_bribe_2),
@@ -101,161 +99,219 @@ public class GameActivity extends AppCompatActivity {
         };
     }
 
-    /* Setting ImageView's for thieves */
-    public void setThieves() {
-        this.thieves = new ImageView[]{
-                findViewById(R.id.game_thief_1),
-                findViewById(R.id.game_thief_2),
-                findViewById(R.id.game_thief_3)
-        };
+    private void setGridViews() {
+        game_LAYOUT_grid = findViewById(R.id.game_LAYOUT_grid);
+        thiefCurrentPos = DEFAULT_POSITION;
+        for (int i = 0; i < grid.length; i++) {
+            grid[i] = (ImageView) game_LAYOUT_grid.getChildAt(i);
+            if (i == DEFAULT_POSITION) {
+                grid[i].setImageResource(R.drawable.thief);
+            }
+        }
     }
 
-    /* Setting ImageView's for police cars */
-    public void setPoliceCars() {
-        this.policeCars = new ImageView[]{
-                findViewById(R.id.game_police_car_00), findViewById(R.id.game_police_car_01),
-                findViewById(R.id.game_police_car_02), findViewById(R.id.game_police_car_10),
-                findViewById(R.id.game_police_car_11), findViewById(R.id.game_police_car_12),
-                findViewById(R.id.game_police_car_20), findViewById(R.id.game_police_car_21),
-                findViewById(R.id.game_police_car_22), findViewById(R.id.game_police_car_30),
-                findViewById(R.id.game_police_car_31), findViewById(R.id.game_police_car_32),
-                findViewById(R.id.game_police_car_40), findViewById(R.id.game_police_car_41),
-                findViewById(R.id.game_police_car_42), findViewById(R.id.game_police_car_50),
-                findViewById(R.id.game_police_car_51), findViewById(R.id.game_police_car_52)
-        };
+    /* Setting ImageView's for buttons */
+    private void setArrowsViews() {
+        game_BTN_right_arrow = findViewById(R.id.game_right_arrow);
+        game_BTN_left_arrow = findViewById(R.id.game_left_arrow);
     }
 
     /* Setting amount of bribes/lives */
-    public void setLives(int lives) {
-        this.lives = lives;
+    public void setDefaultData() {
+        this.lives = DEFAULT_LIVES;
+        this.score = DEFAULT_SCORE;
+        this.intervalBetweenNewPolice = DEFAULT_POLICE_INTERVAL;
+        speed = msp.getInt("speed", 1000);
+
+        sound_busted = MediaPlayer.create(GameActivity.this, R.raw.busted);
+        sound_coin = MediaPlayer.create(GameActivity.this, R.raw.coin);
     }
 
-    /* Setting default position for thief */
-    public void setThiefPosition(int position) {
-        this.thiefPosition = position;
-    }
-
-    /* Police positions */
-    public void setPolicePosition1(int pos) {
-        this.policePosition1 = pos;
-    }
-
-    public void setPolicePosition2(int pos) {
-        this.policePosition2 = pos;
-    }
-
-
-    //          Getters          //
-    /* Get thief position */
-    public int getThiefPosition() {
-        return this.thiefPosition;
-    }
-
-    /* Get police car position */
-    public int getPolicePosition1() {
-        return this.policePosition1;
-    }
-
-    public int getPolicePosition2() {
-        return this.policePosition2;
-    }
-
-    /* Get num of lives left */
-    public int getNumOfLives() {
-        return this.lives;
+    /* Setting type of control - sensors/arrows */
+    private void setControlSettings() {
+        String controlType = msp.getString("control", "A");
+        if (controlType.equals("A")) {
+            setArrowsAction();
+        } else {
+            mrs = new MyRotation(GameActivity.this, cbInterface);
+            mrs.setSensor();
+            game_BTN_left_arrow.setAlpha(0);
+            game_BTN_right_arrow.setAlpha(0);
+        }
     }
 
 
-    /* Thief movement function */
-    private void moveThief(String direction) {
-        switch (direction) {
-            case "Right":
-                if ((getThiefPosition() + 1) < RIGHT_BOUNDARY) {
-                    thieves[getThiefPosition()].setVisibility(View.INVISIBLE);
-                    setThiefPosition(getThiefPosition() + 1);
-                    thieves[getThiefPosition()].setVisibility(View.VISIBLE);
+    /* Thief movement functions*/
+    /* Callback interface for moving the thief with either arrows or the rotation sensors */
+    CallBackInterface cbInterface = new CallBackInterface() {
+        @Override
+        public void moveRight() {
+            if (thiefCurrentPos < DEFAULT_POSITION + 2) {
+                //Checks if there is a police in the RIGHT side of the car to determine collision
+                if (grid[thiefCurrentPos + 1].getDrawable() != null) {
+                    if (typeOfObjectAhead(grid[thiefCurrentPos + 1], "police")) {
+                        busted(grid[thiefCurrentPos + 1]);
+                    } else if (typeOfObjectAhead(grid[thiefCurrentPos + 1], "coin")) {
+                        coinPickUp(grid[thiefCurrentPos + 1]);
+                    }
                 }
-                break;
-
-            case "Left":
-                if ((getThiefPosition() - 1) > LEFT_BOUNDARY) {
-                    thieves[getThiefPosition()].setVisibility(View.INVISIBLE);
-                    setThiefPosition(getThiefPosition() - 1);
-                    thieves[getThiefPosition()].setVisibility(View.VISIBLE);
-                }
-                break;
+                moveThiefRight();
+            }
         }
 
+        @Override
+        public void moveLeft() {
+            if (thiefCurrentPos > DEFAULT_POSITION - 2) {
+                //Checks if there is a police in the LEFT side of the car to determine collision
+                if (grid[thiefCurrentPos - 1].getDrawable() != null) {
+                    if (typeOfObjectAhead(grid[thiefCurrentPos - 1], "police")) {
+                        busted(grid[thiefCurrentPos - 1]);
+                    } else if (typeOfObjectAhead(grid[thiefCurrentPos - 1], "coin")) {
+                        coinPickUp(grid[thiefCurrentPos - 1]);
+                    }
+                }
+                moveThiefLeft();
+            }
+        }
+    };
+
+    // Arrows movement action
+    private void setArrowsAction() {
+        game_BTN_right_arrow.setOnClickListener(v -> cbInterface.moveRight());
+        game_BTN_left_arrow.setOnClickListener(v -> cbInterface.moveLeft());
     }
 
+    /* Move the thief to the left in the grid */
+    public void moveThiefLeft() {
+        grid[thiefCurrentPos].setImageResource(0);
+        thiefCurrentPos--;
+        grid[thiefCurrentPos].setImageResource(R.drawable.thief);
+    }
 
+    /* Move the thief to the right in the grid */
+    public void moveThiefRight() {
+        grid[thiefCurrentPos].setImageResource(0);
+        thiefCurrentPos++;
+        grid[thiefCurrentPos].setImageResource(R.drawable.thief);
+    }
+
+    //## END OF THIEF MOVEMENT FUNCTIONS ##//
+
+    // Start the handler to run the game
     private void startGame() {
-        final Handler handler = new Handler();
-        final Runnable myRun = new Runnable() {
-            @Override
-            public void run() {
-                movePolice();
-                checkIfBusted(getThiefPosition(), getPolicePosition1(), getPolicePosition2());
-                checkIfLost();
-                if (isGameOver) {
-                    return;
-                }
-                if (isPaused) {
-                    return;
-                }
-                startGame();
-            }
+        myRun = () -> {
+            gameLoop();
+            startGame();
+
         };
         handler.postDelayed(myRun, speed);
     }
 
-    private void setRandomPoliceCars() {
-        setPolicePosition1(MySignal.generateRandomInt(DEFAULT_LANE_NUM));
-        setPolicePosition2(MySignal.generateRandomInt(DEFAULT_LANE_NUM));
-        policeCars[getPolicePosition1()].setVisibility(View.VISIBLE);
-        policeCars[getPolicePosition2()].setVisibility(View.VISIBLE);
+
+    // Game action
+    private void gameLoop() {
+        for (int i = grid.length - 1; i > 4; i--) {
+            //Remove all the polices that already pass the car
+            if (i > 17) {
+                grid[i].setImageResource(0);
+                grid[thiefCurrentPos].setImageResource(R.drawable.thief);
+            }
+            //If there is an non-empty ImageView(police/coin), we Compare that ImageView with the ImageView in row ahead to determinate collision OR bonus
+            if ((grid[i - COLUMNS].getDrawable() != null)) {
+                if (grid[i].getDrawable() == null) {
+                    //move the Police OR the coin 1 row forward
+                    if (typeOfObjectAhead(grid[i - COLUMNS], "police"))
+                        setImageViewInGrid(grid[i - COLUMNS], figures[1]);
+
+                    else if (typeOfObjectAhead(grid[i - COLUMNS], "coin")) {
+                        setImageViewInGrid(grid[i - COLUMNS], figures[2]);
+                    }
+                } else if (grid[i].getDrawable() != null) {
+                    //Collision OR bonus
+                    if (typeOfObjectAhead(grid[i - COLUMNS], "police")) {
+                        busted(grid[i - COLUMNS]);
+                    } else if (typeOfObjectAhead(grid[i - COLUMNS], "coin")) {
+                        coinPickUp(grid[i - COLUMNS]);
+                    }
+                }
+            }
+        }
+
+        if (score % 20 == 0)
+            launchObstacle(2);
+        //Draw new police on the screen
+        if (score % intervalBetweenNewPolice == 0) {
+            launchObstacle(1);
+        }
+        score += 5;
     }
 
-    private void movePolice() {
-        if ((getPolicePosition1() + 3) <= LOWER_BOUNDARY && (getPolicePosition2() + 3) <= LOWER_BOUNDARY) {
-            policeCars[getPolicePosition1()].setVisibility(View.INVISIBLE);
-            policeCars[getPolicePosition2()].setVisibility(View.INVISIBLE);
-            setPolicePosition1(getPolicePosition1() + 3);
-            setPolicePosition2(getPolicePosition2() + 3);
-            policeCars[getPolicePosition1()].setVisibility(View.VISIBLE);
-            policeCars[getPolicePosition2()].setVisibility(View.VISIBLE);
-        } else {
-            clearBottom();
-            setRandomPoliceCars();
-        }
+
+    //  Picks a Random location and sets a figure
+    public void launchObstacle(int fig) {
+        int newLocation = (int) (Math.random() * COLUMNS);
+        grid[newLocation].setImageResource(figures[fig]);
     }
 
-    /* Clears the bottom row */
-    public void clearBottom() {
-        for (int i = 15; i <= LOWER_BOUNDARY; i++) {
-            policeCars[i].setVisibility(View.INVISIBLE);
-        }
+    // Helps set the right resources
+    private void setImageViewInGrid(ImageView _grid, int resID) {
+        int index = Arrays.asList(grid).indexOf(_grid);
+        grid[index + COLUMNS].setImageResource(resID);
+        grid[index].setImageResource(0);
     }
 
-    /* Check if police busted thief */
-    public void checkIfBusted(int thiefPosition, int policePosition1, int policePosition2) {
-        if ((thiefPosition == 0 && (policePosition1 == 15 || policePosition2 == 15))
-                || (thiefPosition == 1 && (policePosition1 == 16 || policePosition2 == 16))
-                || (thiefPosition == 2 && (policePosition1 == 17 || policePosition2 == 17))) {
-            MySignal.vibrate(GameActivity.this, 500);
-            bribes[getNumOfLives()].setVisibility(View.INVISIBLE);
-            setLives(getNumOfLives() - 1);
-        }
+
+    /* Check if thief caught a coin or got busted */
+    public boolean typeOfObjectAhead(ImageView obstacle, String nameOfObstacle) {
+        //Create bitmap for the object image we want to move forward
+        Bitmap objectBitmap = ((BitmapDrawable) obstacle.getDrawable()).getBitmap();
+
+        if (nameOfObstacle.equalsIgnoreCase("police")) {
+            //Create bitmap for the police resource image
+            Drawable policeResource = getResources().getDrawable(R.drawable.police_car);
+            Bitmap policeResourceBitmap = ((BitmapDrawable) policeResource).getBitmap();
+
+            return objectBitmap.sameAs(policeResourceBitmap);
+
+        } else if (nameOfObstacle.equalsIgnoreCase("coin")) {
+            //Create bitmap for the coin resource image
+            Drawable coinResource = getResources().getDrawable(R.drawable.coin);
+            Bitmap coinResourceBitmap = ((BitmapDrawable) coinResource).getBitmap();
+
+            return objectBitmap.sameAs(coinResourceBitmap);
+        } else return false;
     }
 
-    /* Check if lost */
-    public void checkIfLost() {
-        if (getNumOfLives() == -1) {
-            isGameOver = true;
-            Intent mainIntent = new Intent(GameActivity.this, GameOverActivity.class);
-            GameActivity.this.startActivity(mainIntent);
-            GameActivity.this.finish();
-        }
+    // When thief gets busted //
+    public void busted(ImageView policeCar) {
+        sound_busted.seekTo(0);
+        sound_busted.start();
+        lives--;
+        MySignal.vibrate(getApplicationContext(), 300);
+        policeCar.setImageResource(0);
+        if (lives == -1)
+            GameOver();
+        else
+            bribes[lives].setVisibility(View.INVISIBLE);
+        policeCar.setImageResource(0);
+    }
+
+    // When thief gets a coin //
+    private void coinPickUp(ImageView coin) {
+        score += 10;
+        coin.setImageResource(0);
+        sound_coin.seekTo(0);
+        sound_coin.start();
+    }
+
+    /* Game Over ! */
+    public void GameOver() {
+        handler.removeCallbacks(myRun);
+        Intent mainIntent = new Intent(GameActivity.this, GameOverActivity.class);
+        mainIntent.putExtra("score", score);
+        GameActivity.this.startActivity(mainIntent);
+        GameActivity.this.finish();
+
     }
 
 }

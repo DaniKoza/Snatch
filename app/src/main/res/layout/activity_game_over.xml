@@ -3,42 +3,74 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".GameOverActivity"
-    android:background="@drawable/background_blue">
+    android:background="@drawable/background_blue"
+    tools:context=".GameOverActivity">
 
     <ImageView
         android:id="@+id/game_over_ic_busted"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
         android:layout_centerInParent="true"
-        android:src="@drawable/ic_busted"/>
+        android:layout_marginTop="20dp"
+        android:src="@drawable/ic_busted" />
 
     <TextView
-        android:layout_above="@+id/game_over_ic_busted"
+        android:id="@+id/game_over_player_score"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_above="@+id/game_over_ic_busted"
         android:layout_centerHorizontal="true"
+        android:fontFamily="sans-serif-black"
+        android:textColor="@color/colorBlack"
+        android:textSize="16sp"
+        android:layout_marginBottom="20dp"/>
+
+    <Button
+        android:id="@+id/game_over_BTN_save"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Save!"
+        android:layout_centerHorizontal="true"
+        android:layout_toLeftOf="@+id/game_over_player_score"
+        android:layout_above="@+id/game_over_ic_busted"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="BUSTED"
+        android:layout_centerHorizontal="true"
+        android:fontFamily="sans-serif-black"
         android:textColor="@color/colorBlack"
         android:textSize="34sp"
-        android:fontFamily="sans-serif-black"/>
+        android:layout_marginTop="20dp"/>
 
     <Button
         android:id="@+id/BTN_play_again"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
         android:layout_below="@+id/game_over_ic_busted"
         android:layout_centerHorizontal="true"
-        android:text="Play Again"/>
+        android:layout_margin="10dp"
+        android:text="Play Again" />/>
 
     <Button
         android:id="@+id/BTN_back_to_main"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
         android:layout_below="@+id/BTN_play_again"
         android:layout_centerHorizontal="true"
-        android:text="Main Menu"
-        android:layout_margin="20dp"/>
+        android:layout_margin="10dp"
+        android:text="Main Menu" />
+
+    <Button
+        android:id="@+id/BTN_high_scores"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:layout_below="@+id/BTN_back_to_main"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="15dp"
+        android:text="High Scores" />
 
 
 </RelativeLayout>

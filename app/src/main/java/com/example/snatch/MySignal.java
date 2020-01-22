@@ -22,12 +22,8 @@ public class MySignal {
     }
 
     /* Random numbers generator */
-    public static int generateRandomInt(int upperRange){
+    public static int generateRandomInt(int upperRange) {
         Random random = new Random();
         return random.nextInt(upperRange);
     }
-
-
-
-
 }

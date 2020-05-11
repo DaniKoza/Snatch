@@ -1,4 +1,4 @@
 # Snatch
 Made by: Daniel Kozachkevich.
  
-First version of the game, to be added are the following features: animations, rotarion, music, settings menu...
+First application I've made, a simple dodge the police game. The app integrates with google maps API, also it uses phone's sensors, has sounds effects and a leader board based on location.  
